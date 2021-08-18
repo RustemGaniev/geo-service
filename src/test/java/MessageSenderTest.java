@@ -14,44 +14,18 @@ import ru.netology.sender.MessageSenderImpl;
 public class MessageSenderTest {
 
     @Test
-    public void russianMessageSenderTest(){
+    public void messageSenderTest() {
 
         GeoService geoService = new GeoServiceImpl();
         LocalizationService localizationService = new LocalizationServiceImpl();
-        String mockedIP = "172.090.163.11";
-        Location location = geoService.byIp(mockedIP);
-        String result = localizationService.locale(location.getCountry());
-        String expected = "Добро пожаловать";
-        Assertions.assertEquals(expected, result);
+        String[] mockedIP = {"172.090.163.11", "96.190.164.115"};
+        String[] expected = {"Добро пожаловать", "Welcome"};
+        for (int i = 0; i < mockedIP.length; i++) {
+            Location location = geoService.byIp(mockedIP[i]);
+            String result = localizationService.locale(location.getCountry());
+            Assertions.assertEquals(expected[i], result);
 
-
-
-        //LocalizationService localizationService = new LocalizationServiceImpl();
-        //String expected = "Добро пожаловать";
-        //Country mockedCountry = Country.RUSSIA;
-        //String result = localizationService.locale(mockedCountry);
-        //Assertions.assertEquals(expected, result);
+        }
     }
-
-    @Test
-    public void englishMessageSenderTest(){
-        GeoService geoService = new GeoServiceImpl();
-        LocalizationService localizationService = new LocalizationServiceImpl();
-        String mockedIP = "96.190.164.115";
-        Location location = geoService.byIp(mockedIP);
-        String result = localizationService.locale(location.getCountry());
-        String expected = "Welcome";
-        Assertions.assertEquals(expected, result);
-    }
-    @BeforeAll
-    public static void beforeAll(){
-        System.out.println("Test is beginning");
-    }
-
-    @AfterAll
-    public static void afterAll(){
-        System.out.println("Test has finished");
-    }
-
     }
 
