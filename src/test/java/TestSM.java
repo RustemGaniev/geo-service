@@ -1,34 +1,24 @@
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-import ru.netology.entity.Country;
+import org.junit.jupiter.api.Test;
 import ru.netology.entity.Location;
-
-import java.util.stream.Stream;
+import ru.netology.i18n.LocalizationServiceImpl;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static ru.netology.entity.Country.RUSSIA;
 
 public class TestSM {
 
-    @ParameterizedTest
-    @MethodSource("MessageSenderTest.rustem")
-    public void messageSenderTest(Location argument) {
+    @Test
+    public void messageSenderTest() {
 
-        String expection;
-        GeoServiceImplMock geoService = new GeoServiceImplMock();
-        geoService.setValue(argument);
-        Location location = geoService.byIp("Test ip");
-        LocalizationServiceMock localizationService = new LocalizationServiceMock();
-        String result = localizationService.locale(location.getCountry());
-        if (location.getCountry().equals(Country.RUSSIA)) {
-            expection = "Добро пожаловать";
-        } else expection = "Welcome";
-        Assertions.assertEquals(expection, result);
+        LocalizationServiceImpl localizationService = new LocalizationServiceImpl();
+        Location mockedLocation = mock(Location.class);
+        when(mockedLocation.getCountry()).thenReturn(RUSSIA);
+        String result = localizationService.locale(mockedLocation.getCountry());
+        String expected = "Добро пожаловать";
+        Assertions.assertEquals(expected, result);
     }
-
-    public static Stream<Arguments> rustem() {
-        return Stream.of(Arguments.of(new Location("Moscow", Country.RUSSIA, "Lenina", 15)),
-                Arguments.of(new Location("New York", Country.USA, " 10th Avenue", 32)));
-    }
-
 }
+
 
 
