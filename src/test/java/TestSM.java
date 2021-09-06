@@ -1,7 +1,10 @@
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import ru.netology.entity.Country;
 import ru.netology.entity.Location;
+import ru.netology.geo.GeoService;
+import ru.netology.i18n.LocalizationService;
 import ru.netology.sender.MessageSender;
 import ru.netology.sender.MessageSenderImpl;
 
@@ -21,10 +24,11 @@ public class TestSM {
 
         for (int i = 0; i < location.length; i++) {
 
-            GeoServiceMock geoService = new GeoServiceMock();
-            geoService.setLocation(location[i]);
-            LocalizationServiceMock localizationService = new LocalizationServiceMock();
-            localizationService.setMessage(message[i]);
+            GeoService geoService = Mockito.mock(GeoService.class);
+            Mockito.when(geoService.byIp(ip[i])).thenReturn(location[i]);
+
+            LocalizationService localizationService = Mockito.mock(LocalizationService.class);
+            Mockito.when(localizationService.locale(location[i].getCountry())).thenReturn(message[i]);
 
             MessageSender messageSender = new MessageSenderImpl(geoService, localizationService);
 

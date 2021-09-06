@@ -18,6 +18,7 @@ public class GeoServiceMock implements GeoService {
     }
 
     public void setLocation(Location location) {
+
         this.location = location;
     }
 }
